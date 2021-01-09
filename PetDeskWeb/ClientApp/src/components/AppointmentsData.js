@@ -90,21 +90,12 @@ export class AppointmentsData extends Component {
     }
 
     timeConvert(time) {
-        let offset = "-8";
-        d = new Date();
 
-        // convert to msec
-        // add local time zone offset 
-        // get UTC time in msec
-        utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+        let offset = parseInt(8 - (time.charAt(time.length - 4)));
+        let offsetMins = time.toString(); offsetMins = offsetMins.slice(3, -9);
+        let offsetHour = parseInt(time.slice(0, -3)) + parseInt(offset);
 
-        // create new Date object for different city
-        // using supplied offset
-        nd = new Date(utc + (3600000 * offset));
-
-        // return time as a string
-        console.log("PST " + nd.toLocaleString());
-
+        return offsetHour + ":" + offsetMins + " PST";
     }
 
     handleChange = (e) => {
@@ -152,8 +143,7 @@ export class AppointmentsData extends Component {
                                     {"Type: " + appointment.appointmentType}
                                 </td>
                                 <td>{"Date: " + appointment.requestedDateTimeOffset.slice(0, -15)}<br />
-                                    {"Time: " + appointment.requestedDateTimeOffset.split("T")[1].slice(0, -9) + " PST"}<br />
-                                    
+                                    {"Time: " + this.timeConvert(appointment.requestedDateTimeOffset.split("T")[1])}<br />
                                 </td>
                                 <td>
                                     {"ID: " + appointment.user_UserId}<br />
@@ -236,9 +226,9 @@ export class AppointmentsData extends Component {
                         {"ID: " + appointment.appointmentId}<br />
                         {"Type: " + appointment.appointmentType}
                     </td>
-                    <td>{"Date: " + appointment.requestedDateTimeOffset.slice(0, -15)}<br />
-                        {"Time: " + appointment.requestedDateTimeOffset.split("T")[1].slice(0, -9) + " PST"}<br />
-            
+                    <td>
+                        {"Date: " + appointment.requestedDateTimeOffset.slice(0, -15)}<br />
+                        {"Time: " + this.timeConvert(appointment.requestedDateTimeOffset.split("T")[1])}<br />
                     </td>
                     <td>
                         {"ID: " + appointment.user_UserId}<br />
